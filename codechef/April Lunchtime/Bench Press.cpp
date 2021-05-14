@@ -1,44 +1,49 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int32_t main(void){
+int main(void){
 
-    int t;
+    long int t;
     cin>>t;
     while(t--){
 
-        int N,W,Wr;
+        long int N,W,Wr;
         cin>>N>>W>>Wr;
-
-        map<int, int> mp;
-        int arr[N];
-
-        for(int i=0; i<N; i++){
-            cin>>arr[i];
-            mp[arr[i]]++;
+        long long int sum = 0;
+        map<long int,long int> mp;
+        long int tmp;
+        for(long int i=0; i<N; i++){
+            cin>>tmp;
+            sum += tmp;
+            mp[tmp]++;
         }
-
-        if(Wr>=W)
+        if((sum+Wr)<W){
+            cout<<"NO"<<endl;
+            continue;
+        }
+        else if(W==Wr){
             cout<<"YES"<<endl;
+            continue;
+        }
         else{
             W -= Wr;
-            for(int i=0; i<N; i++){
-                if(mp[arr[i]]>=2){
-                    int count = mp[arr[i]];
-                    if((count%2)==0)
-                        W-=count*arr[i];
-                    else
-                        W-=(count-1)*arr[i];
-                    mp[arr[i]]=0;
+            map<long int, long int>::iterator itr;
+            for(itr = mp.begin(); itr!=mp.end(); ++itr){
+                long int cnt = itr->second;
+                if(cnt>1){
+                    W -= ((itr->first)*cnt);
+                    if(cnt&1)
+                        W += itr->first;
                 }
                 if(W<=0)
                     break;
             }
-            if (W<=0)
+            if(W<=0)
                 cout<<"YES"<<endl;
             else
                 cout<<"NO"<<endl;
         }
     }
+
     return 0;
 }
